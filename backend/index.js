@@ -5,18 +5,16 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
-const AWS = require('aws-sdk');
 
 // Setup Express
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
-app.use(fileUpload({
-    useTempFiles: true
-}));
+app.use(fileUpload());
 
 // Routes
+app.use('/image', require('./routes/imageRouter'));
 app.use('/user', require('./routes/userRouter'));
 
 //Connect to MongoDB
