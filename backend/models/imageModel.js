@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const imageSchema = new mongoose.Schema({
     urlLocation: {
-        type: String,
-        required: true
+        type: String
     },
     isHidden: {
         type: Boolean,

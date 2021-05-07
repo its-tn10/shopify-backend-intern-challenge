@@ -23,7 +23,7 @@ S3.createBucket({
 });
 
 const imageCtrl = {
-    upload: async (req, res) => {
+    uploadImage: async (req, res) => {
         try {
             if (!req.files.file)
                 return res.status(400).json({msg: "Oops! It seems like you did not upload a file -- please try again."});
@@ -39,15 +39,44 @@ const imageCtrl = {
                     userId = userObj._id;
             }
 
+            const imageObj = new Images({ isHidden: isHidden, ownerId: mongoose.Types.ObjectId(userId) });
+            await imageObj.save();
+
             const response = await S3.upload({
                 Bucket: BUCKET_NAME,
+                Key: imageObj.id,
                 Body: req.files.file.data
             }).promise();
 
-            const imageObj = new Images({ urlLocation: response.Location, isHidden: isHidden, ownerId: mongoose.Types.ObjectId(userId) });
-            await imageObj.save();
+            await Images.findByIdAndUpdate({ _id: imageObj._id }, {"urlLocation": response.Location});
+            res.status(200).json({msg: response.Location});
+        } catch (err) {
+            return res.status(500).json({msg: err.message});
+        }
+    },
+    deleteImage: async (req, res) => {
+        try {
+            const { imageId } = req.body;
+            
+            const imageObj = await Images.findOne({ _id: mongoose.Types.ObjectId(imageId) });
+            if(!imageObj) return res.status(400).json({msg: "The provided image does not exist -- please try again."});
 
-            res.status(200).json({msg: data.Location});
+            let userId = '';
+            if (req.cookies.token) {
+                const userObj = await Users.findOne({ username: req.cookies.token });
+                if (userObj)
+                    userId = userObj._id;
+            }
+
+            if (imageObj.ownerId != userId) return res.status(400).json({msg: "You do not have permission to delete this image."});
+            
+            await S3.deleteObject({
+                Bucket: BUCKET_NAME,
+                Key: imageObj.id
+            }).promise();
+            await imageObj.remove();
+
+            res.status(200).json({msg: "Success! The image has been deleted."});
         } catch (err) {
             return res.status(500).json({msg: err.message});
         }
