@@ -6,6 +6,10 @@ import NavBar from './NavBar';
 import PublicImages from './PublicImages';
 import UserImages from './UserImages';
 
+import SignInModal from './SignInModal';
+import SignUpModal from './SignUpModal';
+import UploadModal from './UploadModal';
+
 import { Container, Divider } from 'semantic-ui-react';
 
 const propTypes = {};
@@ -15,20 +19,37 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {signinModal: false, signupModal: false, uploadModal: false};
+    
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
+
+    openModal = (type) => {
+        this.setState({[type]: true});
+    };    
+    
+    closeModal = (type) => {
+        this.setState({[type]: false});
+    };
 
     render() {
         return (
-            <Container text style={{marginTop: '7em'}}>
-                <NavBar />
-    
-                <UserImages />
+            <>
+                <Container style={{marginTop: '7em'}}>
+                    <NavBar openFunction={this.openModal} />
+        
+                    <UserImages />
 
-                <Divider />
+                    <Divider />
 
-                <PublicImages />
-            </Container>
+                    <PublicImages />
+                </Container>
+
+                <SignInModal isOpen={this.state.signinModal} closeFunction={this.closeModal} />
+                <SignUpModal isOpen={this.state.signupModal} closeFunction={this.closeModal} />
+                <UploadModal isOpen={this.state.uploadModal} closeFunction={this.closeModal} />
+            </>
         );
     }
 }
