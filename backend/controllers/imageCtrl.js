@@ -111,6 +111,13 @@ const imageCtrl = {
         } catch (err) {
             return res.status(500).json({msg: err.message});
         }
+    },
+    viewGallery: async (req, res) => {
+        try {
+            res.status(200).json(await Images.find({isHidden: false}).sort('-uploadDate').select());
+        } catch (err) {
+            return res.status(500).json({msg: err.message});
+        }
     }
 }
 
