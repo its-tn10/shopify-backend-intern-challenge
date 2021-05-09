@@ -1,4 +1,6 @@
 const Images = require('../models/imageModel');
+const Users = require('../models/userModel');
+
 const AWS = require('aws-sdk');
 const mongoose = require('mongoose');
 
@@ -56,27 +58,29 @@ const imageCtrl = {
     },
     deleteImage: async (req, res) => {
         try {
-            const { imageId } = req.body;
-            
-            const imageObj = await Images.findOne({ _id: mongoose.Types.ObjectId(imageId) });
-            if(!imageObj) return res.status(400).json({msg: "The provided image does not exist -- please try again."});
+            if (!req.files)
+                return res.status(400).json({msg: "Oops! It seems like you did not delete a file -- please try again."});
 
             let userId = '';
-            if (req.cookies.token) {
-                const userObj = await Users.findOne({ username: req.cookies.token });
-                if (userObj)
-                    userId = userObj._id;
+            if (!req.body.username)
+                return res.status(400).json({msg: "Oops! You need to be logged in to delete images."});
+
+            const userObj = await Users.findOne({ username: req.body.username });
+            if (!userObj)
+                return res.status(400).json({msg: "The provided username does not exist -- try again?"});
+            userId = userObj.id;
+
+            if (Array.isArray(req.files.files)) {
+                for (i = 0; i < req.files.files.length; i++) {
+                    const response = await deleteImage(userId, req.files.files[i]);
+                    if (!response[0])  return res.status(400).json({msg: response[1]});
+                }
+            } else {
+                const response = await deleteImage(userId, req.files.files);
+                if (!response[0])  return res.status(400).json({msg: response[1]});
             }
 
-            if (imageObj.ownerId != userId) return res.status(400).json({msg: "You do not have permission to delete this image."});
-            
-            await S3.deleteObject({
-                Bucket: BUCKET_NAME,
-                Key: imageObj.id
-            }).promise();
-            await imageObj.remove();
-
-            res.status(200).json({msg: "Success! The image has been deleted."});
+            res.status(200).json({msg: "Success! The image(s) have been deleted."});
         } catch (err) {
             return res.status(500).json({msg: err.message});
         }
@@ -88,10 +92,13 @@ const imageCtrl = {
             const imageObj = await Images.findOne({ _id: imageId });
             if(!imageObj) return res.status(400).json({msg: "The provided image does not exist -- please try again."});
 
+            let userId = '';
             if (username) {
                 const userObj = await Users.findOne({ username: username });
-                if (userObj && userObj.id != imageObj.ownerId && imageObj.isHidden) return res.status(400).json({msg: "You do not have sufficient permissions to view this image."});
+                if (userObj)
+                    userId = userObj.id;
             }
+            if(imageObj.isHidden && userId != imageObj.ownerId) return res.status(400).json({msg: "You do not have sufficient permissions to view this image."});
 
             S3.getObject({Bucket: BUCKET_NAME, Key: imageId},
                 function(error, data) {
@@ -119,6 +126,21 @@ const imageCtrl = {
             return res.status(500).json({msg: err.message});
         }
     }
+}
+
+async function deleteImage(userId, imageId) {
+    const imageObj = await Images.findOne({ _id: imageId });
+    if(!imageObj) return [false, "The provided image does not exist -- please try again."];
+
+    if (imageObj.ownerId != userId) return [false, "You do not have permission to delete this image."];
+    
+    await S3.deleteObject({
+        Bucket: BUCKET_NAME,
+        Key: imageObj.id
+    }).promise();
+    await imageObj.remove();
+
+    return [true, ""];
 }
 
 async function uploadImage(userId, file, isHidden = false) {
