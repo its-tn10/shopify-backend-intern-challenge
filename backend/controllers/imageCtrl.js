@@ -58,7 +58,7 @@ const imageCtrl = {
     },
     deleteImage: async (req, res) => {
         try {
-            if (!req.files)
+            if (!req.body.files)
                 return res.status(400).json({msg: "Oops! It seems like you did not delete a file -- please try again."});
 
             let userId = '';
@@ -70,17 +70,18 @@ const imageCtrl = {
                 return res.status(400).json({msg: "The provided username does not exist -- try again?"});
             userId = userObj.id;
 
-            if (Array.isArray(req.files.files)) {
-                for (i = 0; i < req.files.files.length; i++) {
-                    const response = await deleteImage(userId, req.files.files[i]);
+            if (Array.isArray(req.body.files)) {
+                for (i = 0; i < req.body.files.length; i++) {
+                    const response = await deleteImage(userId, req.body.files[i]);
                     if (!response[0])  return res.status(400).json({msg: response[1]});
                 }
             } else {
-                const response = await deleteImage(userId, req.files.files);
+                const response = await deleteImage(userId, req.body.files);
                 if (!response[0])  return res.status(400).json({msg: response[1]});
             }
 
-            res.status(200).json({msg: "Success! The image(s) have been deleted."});
+            const images = await Images.find({ownerId: userObj.id}).select();
+            res.status(200).json(images);
         } catch (err) {
             return res.status(500).json({msg: err.message});
         }

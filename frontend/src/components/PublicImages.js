@@ -7,9 +7,6 @@ const propTypes = {images: PropTypes.array};
 const defaultProps = {};
 
 class PublicImages extends React.Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         return(
             <>

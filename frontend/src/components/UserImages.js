@@ -7,10 +7,6 @@ const propTypes = {images: PropTypes.array, username: PropTypes.string, deleteFu
 const defaultProps = {};
 
 class UserImages extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleDeletion = (id, username) => {
         this.props.deleteFunction(id, username).then(response => {
         });
@@ -25,7 +21,7 @@ class UserImages extends React.Component {
     }
 
     GetColumns(images, username, del) {
-        if (images.length == 0 || !images) {
+        if (images.length === 0 || !images) {
             return(
                 <Grid columns={1} id='nested'>
                     <Grid.Column><p align="center"><b>You currently have no images uploaded.</b></p></Grid.Column>
