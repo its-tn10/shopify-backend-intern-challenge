@@ -45,8 +45,8 @@ const userCtrl = {
     },
     images: async (req, res) => {
         try {
-            const { username } = req.body;
-
+            const { username } = req.query;
+            
             const userObj = await Users.findOne({ username: username });
             if(!userObj) return res.status(400).json({msg: "The provided username does not exist -- try again?"});
 
