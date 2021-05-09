@@ -37,7 +37,7 @@ class App extends React.Component {
         return (
             <>
                 <Container style={{marginTop: '7em'}}>
-                    <NavBar openFunction={this.openModal} />
+                    <NavBar openFunction={this.openModal} username={this.props.username} signOutFunction={this.props.logoutUser} />
         
                     <UserImages />
 
@@ -46,7 +46,7 @@ class App extends React.Component {
                     <PublicImages />
                 </Container>
 
-                <SignInModal isOpen={this.state.signinModal} closeFunction={this.closeModal} />
+                <SignInModal isOpen={this.state.signinModal} closeFunction={this.closeModal} loginUserAccount={this.props.loginUserAccount} />
                 <SignUpModal isOpen={this.state.signupModal} closeFunction={this.closeModal} createUserAccount={this.props.createUserAccount} />
                 <UploadModal isOpen={this.state.uploadModal} closeFunction={this.closeModal} />
             </>

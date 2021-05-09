@@ -29,7 +29,7 @@ export const loginUserAccount = (username) => (dispatch) => {
     return callAPI(LOGIN_ROUTE, 'POST', {username: username}).then(trash => {
         return callAPI(USER_IMAGES_ROUTE, 'GET', {username: username}).then(response => {
             dispatch(loginUser(username, response.data));
-            return [true];
+            return [true, {msg: 'You have logged in successfully!'}];
         }).catch(err => {
             return [false, err.response.data];
         });

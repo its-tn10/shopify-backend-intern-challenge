@@ -10,15 +10,14 @@ class SignUpModal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {username: '', msg: 'Create an acount within seconds and begin uploading images publicly and privately!'};
-    this.handleChange = this.handleChange.bind(this);
+    this.state = {username: '', disabled: false, msg: 'Create an acount within seconds and begin uploading images publicly and privately!'};
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
   handleSubmit = () => {
     this.props.createUserAccount(this.state.username).then(response => {
-      if (response[0] === 'boolean') {
-        this.setState({msg: response[1].msg});
+      if (response[0] === true) {
+        this.setState({msg: response[1].msg, disabled: true});
       } else {
         this.setState({msg: response[1].msg});
       }
@@ -43,12 +42,13 @@ class SignUpModal extends React.Component {
                   name='username'
                   value={username}
                   onChange={this.handleChange}
+                  disabled={this.state.disabled}
                 />
               </Form.Field>
             </Form>
           </Modal.Content>
           <Modal.Actions>
-            <Button primary type='submit' onClick={this.handleSubmit}>Create an account</Button>
+            <Button primary type='submit' onClick={this.handleSubmit} disabled={this.state.disabled}>Create an account</Button>
           </Modal.Actions>
       </Modal>
     );

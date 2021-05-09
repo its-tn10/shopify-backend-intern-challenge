@@ -13,9 +13,16 @@ export const USER_IMAGES_ROUTE = `${USER_ROUTE}/images`;
 // ******************    UTIL FUNCTIONS    ****************** //
 
 export const callAPI = (URL, method, data) => {
+    if (method == 'POST') {
+        return axios({
+            url: URL,
+            method: method,
+            data: data
+        });
+    }
     return axios({
         url: URL,
         method: method,
-        data: data
+        params: data
     });
 };
