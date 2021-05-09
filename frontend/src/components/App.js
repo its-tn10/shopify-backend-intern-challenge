@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
 import NavBar from './NavBar';
 import PublicImages from './PublicImages';
@@ -12,7 +11,8 @@ import UploadModal from './UploadModal';
 
 import { Container, Divider } from 'semantic-ui-react';
 
-const propTypes = {};
+const propTypes = {createUserAccount: PropTypes.func, loginUserAccount: PropTypes.func, logoutUser: PropTypes.func, 
+                    username: PropTypes.string, user_images: PropTypes.array, images: PropTypes.array, curr_img: PropTypes.string};
 const defaultProps = {};
 
 class App extends React.Component {
@@ -47,7 +47,7 @@ class App extends React.Component {
                 </Container>
 
                 <SignInModal isOpen={this.state.signinModal} closeFunction={this.closeModal} />
-                <SignUpModal isOpen={this.state.signupModal} closeFunction={this.closeModal} />
+                <SignUpModal isOpen={this.state.signupModal} closeFunction={this.closeModal} createUserAccount={this.props.createUserAccount} />
                 <UploadModal isOpen={this.state.uploadModal} closeFunction={this.closeModal} />
             </>
         );

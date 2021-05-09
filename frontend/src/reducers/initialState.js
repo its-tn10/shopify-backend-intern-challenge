@@ -1,11 +1,11 @@
 const initialState = {
     user: {
-        username: null,
+        username: '',
         images: []
     },
     images: {
         images: [],
-        curr_img: null
+        curr_img: ''
     }
 };
 
