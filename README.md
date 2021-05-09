@@ -5,7 +5,7 @@ Howdy!
 
 This repository is my submission for Shopify's Fall 2021 Backend Developer Internship Challenge, as part of their internship application. It is an application utilized as an image repository that anyone can utilize to add, delete, and view images uploaded around the world. 
 
-It is a back-end oriented project, but I have included a minimal front-end service that can be utilized for QA testing. You can view the front-end service live right now at my website [here](http://shopify.tientavu.com/)! Similarly, the back-end service is also published [here](http://shopify-backend.tientavu.com/).
+It is a back-end oriented project, but I have included a minimal front-end service that can be utilized for QA testing. You can view the front-end service live right now at my website [here](http://shopify.tientavu.com/)! Similarly, the back-end service is also published [here](http://shopify-backend.tientavu.com/). Feel free to test it with a username of `tavutien`.
 ##  Technologies
 The following services were utilized to run the full-stack application:
 
