@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://18.207.149.129:5000';
+const API_URL = 'http://shopify-backend.tientavu.com';
 
 // ******************    USER ROUTES    ****************** //
 
