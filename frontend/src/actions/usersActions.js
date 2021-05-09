@@ -1,6 +1,6 @@
 import { CREATE_ROUTE, LOGIN_ROUTE, USER_IMAGES_ROUTE, callAPI } from '../constants/APIConstants';
 
-const loginUser = (username, images) => {
+export const loginUser = (username, images) => {
     return {
         type: 'USER_LOGIN',
         payload: {

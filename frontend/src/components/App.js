@@ -12,7 +12,7 @@ import UploadModal from './UploadModal';
 import { Container, Divider } from 'semantic-ui-react';
 
 const propTypes = {createUserAccount: PropTypes.func, loginUserAccount: PropTypes.func, logoutUser: PropTypes.func, uploadImages: PropTypes.func,
-                    username: PropTypes.string, user_images: PropTypes.array, images: PropTypes.array, curr_img: PropTypes.string};
+    deleteImage: PropTypes.func, username: PropTypes.string, user_images: PropTypes.array, images: PropTypes.array, curr_img: PropTypes.string};
 const defaultProps = {};
 
 class App extends React.Component {
@@ -41,7 +41,7 @@ class App extends React.Component {
                 <Container style={{marginTop: '7em'}}>
                     <NavBar openFunction={this.openModal} username={this.props.username} signOutFunction={this.props.logoutUser} />
         
-                    <UserImages images={this.props.user_images} username={this.props.username} />
+                    <UserImages images={this.props.user_images} username={this.props.username} deleteFunction={this.props.deleteImage} />
 
                     <Divider />
 

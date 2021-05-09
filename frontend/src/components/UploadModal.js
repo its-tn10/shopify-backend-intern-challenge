@@ -22,7 +22,7 @@ class UploadModal extends React.Component {
     formData.append('username', this.props.username);
 
     this.props.uploadFunction(formData).then(response => {
-      console.log(response);
+      this.props.closeFunction('uploadModal');
     });
 
     this.setState({images: []});
