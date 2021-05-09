@@ -1,4 +1,8 @@
+const Images = require('../models/imageModel');
 const Users = require('../models/userModel');
+
+const mongoose = require('mongoose');
+
 const userCtrl = {
     register: async (req, res) => {
         try {
@@ -27,11 +31,6 @@ const userCtrl = {
             const userObj = await Users.findOne({ username: username });
             if(!userObj) return res.status(400).json({msg: "The provided username does not exist -- try again?"});
 
-            res.cookie('token', username, {
-                httpOnly: true,
-                maxAge: 7*24*60*60*1000 // 7 days 
-            });
-
             res.status(200).json({msg: "Success! You have logged in to your account!"});
         } catch (err) {
             return res.status(500).json({msg: err.message});
@@ -39,8 +38,21 @@ const userCtrl = {
     },
     logout: async (req, res) => {
         try {
-            res.clearCookie('token');
             return res.status(200).json({msg: "Success! You have logged out of your account."});
+        } catch (err) {
+            return res.status(500).json({msg: err.message});
+        }
+    },
+    images: async (req, res) => {
+        try {
+            const { username } = req.body;
+
+            const userObj = await Users.findOne({ username: username });
+            if(!userObj) return res.status(400).json({msg: "The provided username does not exist -- try again?"});
+
+            const images = await Images.find({ownerId: mongoose.Types.ObjectId(userObj._id)}).select();
+
+            res.status(200).json(images);
         } catch (err) {
             return res.status(500).json({msg: err.message});
         }
