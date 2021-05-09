@@ -11,7 +11,7 @@ import UploadModal from './UploadModal';
 
 import { Container, Divider } from 'semantic-ui-react';
 
-const propTypes = {createUserAccount: PropTypes.func, loginUserAccount: PropTypes.func, logoutUser: PropTypes.func, 
+const propTypes = {createUserAccount: PropTypes.func, loginUserAccount: PropTypes.func, logoutUser: PropTypes.func, uploadImages: PropTypes.func,
                     username: PropTypes.string, user_images: PropTypes.array, images: PropTypes.array, curr_img: PropTypes.string};
 const defaultProps = {};
 
@@ -48,7 +48,7 @@ class App extends React.Component {
 
                 <SignInModal isOpen={this.state.signinModal} closeFunction={this.closeModal} loginUserAccount={this.props.loginUserAccount} />
                 <SignUpModal isOpen={this.state.signupModal} closeFunction={this.closeModal} createUserAccount={this.props.createUserAccount} />
-                <UploadModal isOpen={this.state.uploadModal} closeFunction={this.closeModal} />
+                <UploadModal isOpen={this.state.uploadModal} closeFunction={this.closeModal} uploadFunction={this.props.uploadImages} username={this.props.username} />
             </>
         );
     }
