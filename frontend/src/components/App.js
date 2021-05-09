@@ -19,6 +19,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
+        this.props.getGallery();
+
         this.state = {signinModal: false, signupModal: false, uploadModal: false};
     
         this.openModal = this.openModal.bind(this);
@@ -39,11 +41,11 @@ class App extends React.Component {
                 <Container style={{marginTop: '7em'}}>
                     <NavBar openFunction={this.openModal} username={this.props.username} signOutFunction={this.props.logoutUser} />
         
-                    <UserImages />
+                    <UserImages images={this.props.user_images} username={this.props.username} />
 
                     <Divider />
 
-                    <PublicImages />
+                    <PublicImages images={this.props.images} />
                 </Container>
 
                 <SignInModal isOpen={this.state.signinModal} closeFunction={this.closeModal} loginUserAccount={this.props.loginUserAccount} />

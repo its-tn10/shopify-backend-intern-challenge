@@ -15,6 +15,8 @@ export const USER_IMAGES_ROUTE = `${USER_ROUTE}/images`;
 export const IMAGE_ROUTE = `${API_URL}/image`;
 export const UPLOAD_ROUTE = `${IMAGE_ROUTE}/upload`;
 export const DELETE_ROUTE = `${IMAGE_ROUTE}/delete`;
+export const GALLERY_ROUTE = `${IMAGE_ROUTE}/gallery`;
+export const VIEW_ROUTE = `${IMAGE_ROUTE}/view`;
 
 // ******************    UTIL FUNCTIONS    ****************** //
 

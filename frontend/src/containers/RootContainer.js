@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import { getImages, uploadImages } from '../actions/imagesActions';
+import { getGallery, getImages, uploadImages } from '../actions/imagesActions';
 import { createUserAccount, loginUserAccount, logoutUser } from '../actions/usersActions';
 
 import App from '../components/App';
@@ -16,4 +16,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { createUserAccount, loginUserAccount, logoutUser, uploadImages })(App);
+export default connect(mapStateToProps, { createUserAccount, loginUserAccount, logoutUser, getGallery, uploadImages })(App);
